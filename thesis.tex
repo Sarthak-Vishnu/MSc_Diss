@@ -35,6 +35,12 @@
 \definecolor{mainblue}{RGB}{51,102,204}
 \definecolor{accentblue}{RGB}{153,204,254}
 
+% The msc+ai class options render the degree as two lines ("Master of Science"
+% then "Artificial Intelligence"); combine them onto a single title-page line.
+\makeatletter
+\renewcommand{\@degreetext}{Master of Science in Artificial Intelligence \\ \@infschool \\ \@university}
+\makeatother
+
 \begin{document}
 \begin{preliminary}
 
