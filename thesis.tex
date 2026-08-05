@@ -24,16 +24,10 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{ragged2e}
-\usepackage{xcolor}
-\usepackage{pgfgantt}
 \usepackage{hyperref}
 
 % Custom ragged-right fixed-width column type, used throughout the result tables.
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
-
-% Colours used only inside the Gantt chart figure in Chapter~\ref{sec:plan}.
-\definecolor{mainblue}{RGB}{51,102,204}
-\definecolor{accentblue}{RGB}{153,204,254}
 
 % The msc+ai class options render the degree as two lines ("Master of Science"
 % then "Artificial Intelligence"); combine them onto a single title-page line.
@@ -685,99 +679,6 @@ One further reading deserves care, because it would be easy to overclaim. Scorin
 One further caveat about the pilot's own design is worth naming rather than leaving implicit. Levy~\cite{bradford2026caution} also reports that language models reason poorly with numerical inputs, and the pilot's prompts necessarily included share counts and dollar values as part of each transaction record, so some part of the instability measured above may reflect this more general weakness rather than the insider-trading scoring task specifically. Disentangling the two was outside the scope of this pilot.
 
 A fuller treatment of the generative-LLM route, including calibration and stability analysis across model versions and inference over the full filing corpus for at least two model families under the admissibility discipline of Section~\ref{sec:results-robust}, is identified here as a direction for future research rather than as an extension of the present study. What this study contributes to it is a negative result obtained cheaply and a stability measurement obtained directly on real financial records.
-
-%==========================================================
-\chapter{Research Plan, Milestones, and Deliverables}
-\label{sec:plan}
-
-The original six-phase plan (Phases~1--6) has been delivered, and the extended study added seven further stages of work: the structured baseline and reframing, the robustness backtest with its admissibility audit and clean-protocol retrain, the disclosure-change branch, the horizon-spectrum robustness check, the full-scale earnings-call analysis, the insider-trading conditioning extension, and the bounded generative-feature-extraction pilot. Figure~\ref{fig:gantt} shows the programme as delivered, with the remaining work (the final write-up) marked as a contingency. Extended-study dates are indicative. Tables~\ref{tab:milestones} and~\ref{tab:deliverables} give the milestones and deliverables, updated to reflect completion and the reusable feature-table deliverable.
-
-\begin{figure}[htbp]
-\centering
-\resizebox{\linewidth}{!}{%
-\begin{ganttchart}[
-    y unit title=0.4cm,
-    y unit chart=0.5cm,
-    vgrid, hgrid,
-    x unit=1.1mm,
-    time slot format=isodate-yearmonth,
-    title/.append style={draw=none, fill=accentblue},
-    title label font=\sffamily\bfseries\color{white},
-    bar/.append style={draw=none, fill=mainblue},
-    bar height=.6,
-    bar label font=\normalsize\color{black!50},
-    link/.style={-stealth, thick, black!65}
-]{2025-05}{2026-09}
-   \gantttitlecalendar{year, month=shortname}\\
-   \ganttbar{Ph.1 Data pipeline}{2025-05}{2025-05} \\
-   \ganttbar{Ph.2 DAPT}{2025-05}{2025-06} \\
-   \ganttbar{Ph.3 Contrastive FT}{2025-06}{2025-06} \\
-   \ganttbar{Ph.4 BERTopic}{2025-06}{2025-07} \\
-   \ganttbar{Ph.5 Original ablation}{2025-07}{2025-07} \\
-   \ganttbar{Structured baseline + reframing}{2025-08}{2025-11} \\
-   \ganttbar{Robustness backtest + audit}{2025-12}{2026-03} \\
-   \ganttbar{Change-features branch}{2026-02}{2026-04} \\
-   \ganttbar{Full-scale earnings-call analysis}{2026-04}{2026-07} \\
-   \ganttbar{Horizon-spectrum robustness check}{2026-07}{2026-07} \\
-   \ganttbar{Insider-trading conditioning extension}{2026-07}{2026-08} \\
-   \ganttbar{Generative-feature-extraction pilot}{2026-08}{2026-08} \\
-   \ganttbar[bar/.append style={fill=orange!75, draw=none}]{Final write-up + submission}{2026-08}{2026-09} \\
-   \ganttbar[bar/.append style={fill=mainblue!30, draw=none}]{Write-up (continuous)}{2025-05}{2026-09}
-\end{ganttchart}%
-}
-\caption{Programme as delivered.
-\textcolor{mainblue}{\rule[0.4ex]{1.2em}{0.7em}}~completed stage;\enspace
-\textcolor{orange!75}{\rule[0.4ex]{1.2em}{0.7em}}~remaining work;\enspace
-\textcolor{mainblue!30}{\rule[0.4ex]{1.2em}{0.7em}}~continuous write-up. Extended-study dates are indicative.}
-\label{fig:gantt}
-\end{figure}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{@{}cL{9cm}c@{}}
-\toprule
-\textbf{Milestone} & \textbf{Description} & \textbf{Status} \\
-\midrule
-$M_1$ & Clean corpus, temporal split indices, volatility labels & Done \\
-$M_2$ & Domain-adapted encoder + perplexity benchmarks & Done \\
-$M_3$ & Contrastive encoders + FinMTEB intrinsic scores & Done \\
-$M_4$ & BERTopic coherence + per-filing topic-feature matrix & Done \\
-$M_5$ & Original ablation results + forecasting metrics & Done \\
-$M_6$ & Structured baseline + reframed incremental-value ablation & Done \\
-$M_7$ & Walk-forward backtest, admissibility audit, clean-protocol verdict & Done \\
-$M_8$ & Disclosure-change + persistence analysis & Done \\
-$M_9$ & Horizon-spectrum robustness check (eight horizons) & Done \\
-$M_{10}$ & Full-scale earnings-call filing- and call-anchor analysis & Done \\
-$M_{11}$ & Insider-trading level test and disagreement conditioning result & Done \\
-$M_{12}$ & Bounded generative-feature-extraction pilot, with published-venue literature grounding & Done \\
-$M_{13}$ & Final report & Remaining \\
-\bottomrule
-\end{tabular}
-\caption{Project milestones.}
-\label{tab:milestones}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{@{}cL{9cm}c@{}}
-\toprule
-\textbf{Deliverable} & \textbf{Description} & \textbf{Status} \\
-\midrule
-$D_1$ & Domain-adapted encoder (DAPT checkpoint) & Done \\
-$D_2$ & Contrastive fine-tuned encoders + FinMTEB evaluation & Done \\
-$D_3$ & BERTopic topic analysis + per-filing topic-feature matrix & Done \\
-$D_4$ & Structured feature block + reusable firm-filing feature table & Done \\
-$D_5$ & Full ablation + walk-forward backtest results & Done \\
-$D_6$ & Disclosure-change feature analysis & Done \\
-$D_7$ & Horizon-spectrum term-structure analysis & Done \\
-$D_8$ & Full-scale earnings-call horizon-contrast finding & Done \\
-$D_9$ & Insider-trading conditioning design and result & Done \\
-$D_{10}$ & Generative-feature-extraction pilot + final report + reproducible codebase & Remaining \\
-\bottomrule
-\end{tabular}
-\caption{Project deliverables.}
-\label{tab:deliverables}
-\end{table}
 
 %-------------------- References -------------------------
 \bibliographystyle{unsrt}
