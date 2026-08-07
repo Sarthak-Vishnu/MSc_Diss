@@ -117,7 +117,7 @@ This study sits at the intersection of seven literatures: (1) the structured cro
 
 \textbf{Information asymmetry and insider trading.} Frankel and Li~\cite{frankel2004characteristics} use the profitability and intensity of insider trades as an observable proxy for a firm's information environment, which is the precedent for using insider activity as a conditioning variable in Section~\ref{sec:results-insider}, which asks where in the cross-section the text increment is earned, rather than as a trading signal in its own right. Cohen, Malloy and Pomorski~\cite{cohen2012decoding} classify insider trades as routine or opportunistic based on whether the same insider traded in the same calendar month in prior years, a classification adapted for the opportunistic-fraction feature defined in Section~\ref{sec:insider-method}, which builds the insider-trading feature block. Bettis, Coles and Lemmon~\cite{bettis2000corporate} document that the great majority of firms operate formal pre-filing blackout policies restricting insider trading, which grounds the construct-validity check reported alongside the insider-trading feature block. Shalen~\cite{shalen1993volume} models dispersion of beliefs among informed traders as a direct driver of both volatility and trading volume, which is the theoretical anchor for reading the insider-disagreement conditioning result of Section~\ref{sec:results-insider} as a cross-sectional counterpart to the study's absorption reading of earnings-call tone.
 
-\textbf{Generative language models as feature extractors.} A distinct way to use large language models (LLMs), prompting a generative model to score text on interpretable dimensions rather than encoding it, is untested by the encoder-based pipeline of this study, and Section~\ref{sec:llm-pilot-method} runs a scoped evaluation of that route to assess it directly. Sclar et al.\ \cite{sclar2024quantifying} find open-source language models extremely sensitive to prompt formatting choices that are explicitly meaning-preserving, with performance differences of up to 76 accuracy points from typesetting the same question differently. Ouyang et al.\ \cite{ouyang2025empirical} find that identical requests to the same model disagree on a large majority of code-generation tasks, and that fixing the decoding temperature to zero reduces but does not eliminate this non-determinism. The finding is cited here for the decoding mechanism it establishes rather than for a magnitude, since the domain is code generation rather than numeric scoring of financial text. Wang et al.\ \cite{wang2024large} show that a language model used as an evaluator can be made to reverse its own ranking of two candidate responses simply by reordering them, evidence that language-model-based scoring is sensitive to factors that are irrelevant to the content being scored, in a pairwise-comparison setting adjacent to but distinct from the absolute scoring task described in Section~\ref{sec:llm-pilot-method}. Together these three results motivate treating an elicited language-model score with caution as a candidate feature, a caution the scoped evaluation of Chapter~\ref{sec:discussion} tests directly on this study's own data rather than relying on precedent alone.
+\textbf{Generative language models as feature extractors.} A distinct way to use large language models (LLMs), prompting a generative model to score text on interpretable dimensions rather than encoding it, is untested by the encoder-based pipeline of this study, and Section~\ref{sec:llm-pilot-method} runs a scoped evaluation of that route to assess it directly. Sclar et al.\ \cite{sclar2024quantifying} find open-source language models extremely sensitive to prompt formatting choices that are explicitly meaning-preserving, with performance differences of up to 76 accuracy points from typesetting the same question differently. Ouyang et al.\ \cite{ouyang2025empirical} find that identical requests to the same model disagree on a large majority of code-generation tasks, and that fixing the decoding temperature to zero reduces but does not eliminate this non-determinism. The finding is cited here for the decoding mechanism it establishes rather than for a magnitude, since the domain is code generation rather than numeric scoring of financial text. Wang et al.\ \cite{wang2024large} show that a language model used as an evaluator can be made to reverse its own ranking of two candidate responses simply by reordering them, evidence that language-model-based scoring is sensitive to factors that are irrelevant to the content being scored, in a pairwise-comparison setting adjacent to but distinct from the absolute scoring task described in Section~\ref{sec:llm-pilot-method}. Vallejo Vera and Driggers~\cite{vallejo2025llms} respond to this instability by measurement rather than by argument, replicating each labelling run ten times at a fixed decoding temperature and reporting an inter-run reliability statistic, which is the design the scoped evaluation of Section~\ref{sec:llm-pilot-method} adopts. Together these results motivate treating an elicited language-model score with caution as a candidate feature, a caution the scoped evaluation of Chapter~\ref{sec:discussion} tests directly on this study's own data rather than relying on precedent alone.
 
 % ===============================================================
 % ================ Summary of Literature Survey =================
@@ -388,18 +388,18 @@ The universe is the Standard \& Poor's 500 (S\&P~500), including delisted firms 
 \label{tab:datasources}
 \begin{tabularx}{\textwidth}{@{}L{3.5cm}XL{2.9cm}@{}}
 \toprule
-\textbf{Provides} & \textbf{Source} & \textbf{Coverage} \\
+\textbf{Data} & \textbf{Source} & \textbf{Coverage} \\
 \midrule
 Item~1A risk-factor text, filing dates, Standard Industrial Classification (SIC) industry codes &
-US Securities and Exchange Commission (SEC) Electronic Data Gathering, Analysis and Retrieval system (EDGAR)\footnotemark[1] &
+US Securities and Exchange Commission (SEC) Electronic Data Gathering, Analysis and Retrieval system (accessed via the EDGAR API)\footnotemark[1] &
 2006--2026 \\
 \addlinespace
 Daily prices and returns &
-(1) FINSABER price file,\footnotemark[2] including delisted names; (2) Center for Research in Security Prices (CRSP)\footnotemark[3] &
+(1) FINSABER-reproduce HuggingFace repository;\footnotemark[2] (2) CRSP (accessed via WRDS institutional access)\footnotemark[3] &
 (1) 2000--2024; (2) 2025 \\
 \addlinespace
 Firm fundamentals: market capitalisation, leverage, book-to-market, return on assets &
-Compustat North America\footnotemark[4] &
+Compustat North America (via WRDS) institutional licence\footnotemark[4] &
 2006--2025 \\
 \addlinespace
 Insider transaction records (\S\ref{sec:insider-method}) &
@@ -420,9 +420,9 @@ FinStreamAI, originally collected from API Ninjas\footnotemark[6] &
 \footnotetext[5]{\url{https://www.sec.gov/data-research/sec-markets-data/insider-transactions-data-sets}}
 \footnotetext[6]{\url{https://api-ninjas.com/}}
 
-Three of these sources need a word on how they were obtained. The Form~4 records were collected by downloading the SEC's quarterly insider-transactions archives, extracting them, and cleaning them down to the S\&P~500 universe of Central Index Key (CIK) identifiers used by the rest of the panel. The earnings-call transcripts were downloaded from the FinStreamAI server maintained by the supervisor of this project, which had itself collected them from the API Ninjas service. CRSP and Compustat are accessed through Wharton Research Data Services (WRDS) under the University's institutional licence.
+Three of these sources need a word on how they were obtained. The Form~4 records were collected by downloading the SEC's quarterly insider-transactions archives, extracting them, and cleaning them down to the S\&P~500 universe of Central Index Key (CIK) identifiers used by the rest of the panel. The earnings-call transcripts were downloaded from the FinStreamAI server maintained by the supervisor of this project, which had itself collected them from the API Ninjas service. Daily returns for 2025 come from the Center for Research in Security Prices (CRSP), and firm fundamentals from Compustat North America. Both are accessed through Wharton Research Data Services (WRDS) under the University's institutional licence.
 
-Firm identifiers are linked across the regulatory and market datasets in three ways: CIK to PERMNO, the permanent security identifier used by CRSP, for assigning volatility labels; CIK to 2-digit SIC code, for constructing the sector view of the contrastive objective described in Section~\ref{sec:text}; and a fiscal-year index that aligns filing dates to return windows. Daily prices are taken from the FINSABER file first and from CRSP for 2025, in that order of priority.
+Firm identifiers are linked across the regulatory and market datasets in three ways: CIK to PERMNO, the permanent security identifier used by CRSP, for assigning volatility labels; CIK to 2-digit SIC code, for constructing the sector view of the contrastive objective described in Section~\ref{sec:text}; and a fiscal-year index that aligns filing dates to return windows. Daily prices are taken from the FINSABER file first, which covers delisted names as well as current constituents, and from CRSP for 2025, in that order of priority.
 
 Two evaluation designs run over this panel, and they partition it differently. The primary design is a single forward split. Models are fitted on filings dated before 2025-01-01 (about 7{,}353 filings) and scored on the 2025 filings (406 filings, of which about 397 carry complete labels), with a 2026 test year held out entirely because its forward windows had not closed at the time of the experiments. The robustness evaluation of Section~\ref{sec:results-robust}, which runs the walk-forward backtest, instead re-splits the panel once per test year, fitting on every filing dated before that year and scoring on the year itself, so the training set expands as the backtest advances. The two designs share the rule that matters: no model is fitted or selected on data drawn from the period it is scored on.
 
@@ -500,20 +500,28 @@ This section describes a scoped evaluation designed to test that judgement again
 
 The evaluation scores the same insider-trading record that the eight hand-crafted Form~4 features of Section~\ref{sec:insider-method} summarise. An open-weights instruction model was prompted to score each of 865 insider-trading windows on three zero-to-hundred dimensions, five independent times per filing, under a fixed prompt, a fixed model version and a fixed decoding seed, so that any dispersion in the resulting scores reflects the elicitation process itself rather than an uncontrolled source of variation. The model's three scores were then compared against the eight hand-crafted features under one prediction head and one set of cross-validation folds, using the same five-fold within-year design applied to the earnings-call filing anchor in Section~\ref{sec:calls-method}, and for the same reason: a score that exists only on the evaluation rows cannot be learned under a train-before-year split. As a control, the identical procedure was repeated on prompts that retained the real identifiers, to check whether removing them changed anything on this post-cutoff slice, where no look-ahead effect should be present to find.
 
-Two of these design choices are taken from the literature rather than invented here. Stripping company identifiers from the prompt is the remedy Glasserman and Lin~\cite{glasserman2024lookahead} propose for the contamination problem, and running the identified prompts as a control follows their own in-sample and anonymised comparison. Repeating an identical prompt several times and treating the spread of the answers as a measurement in its own right follows from the finding that language-model outputs are non-deterministic even at a fixed decoding temperature~\cite{ouyang2025empirical}, and from the sensitivity of these models to variation that leaves the question unchanged~\cite{sclar2024quantifying}.
+Two of these design choices are taken from the literature rather than invented here. Stripping company identifiers from the prompt is the remedy Glasserman and Lin~\cite{glasserman2024lookahead} propose for the contamination problem, and running the identified prompts as a control follows their own in-sample and anonymised comparison. Repeating an identical prompt several times and treating the spread of the answers as a measurement in its own right follows the practice of Vallejo Vera and Driggers~\cite{vallejo2025llms}, who replicate each labelling run ten times at a fixed decoding temperature in order to quantify within-model consistency as an inter-run reliability statistic. That precaution is warranted because language-model outputs are non-deterministic even at a fixed decoding temperature~\cite{ouyang2025empirical}, and because these models are sensitive to variation that leaves the question itself unchanged~\cite{sclar2024quantifying}.
 
 \section{Model and training configurations}
 \label{sec:configs}
 The settings for each model are stated as that model is introduced, which keeps each description self-contained but scatters the numbers across the chapter. Table~\ref{tab:configs} therefore collects them in one place, covering every model the study trains, applies or prompts. Appendix~\ref{app:recipes} defines each parameter and explains what it controls.
 
-\begin{table}[htbp]
-\footnotesize
+{\footnotesize
+\begin{longtable}{@{}L{3.0cm}L{11.0cm}@{}}
 \caption{Configuration of every model used in the study. Appendix~\ref{app:recipes} defines each parameter.}
-\label{tab:configs}
-\begin{tabularx}{\textwidth}{@{}L{3.0cm}X@{}}
+\label{tab:configs}\\
 \toprule
 \textbf{Component} & \textbf{Configuration} \\
 \midrule
+\endfirsthead
+\toprule
+\textbf{Component} & \textbf{Configuration} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\endlastfoot
 DAPT encoder & Base \texttt{all-mpnet-base-v2}; masked-language-model training at 15\% masking; learning rate $2\times10^{-5}$; effective batch 32; five epochs, early stopping on validation perplexity; fp16; 512-token paragraph-aware packing \\
 Contrastive encoders (\texttt{dual}, \texttt{three}, \texttt{three\_lora}) & InfoNCE with in-batch negatives; temperature 0.05; 256-token paragraphs; sector view down-weighted by 0.5; label-aware false-negative masking on 2-digit SIC; LoRA rank 16 for \texttt{three\_lora} \\
 Task-aligned encoders (\texttt{volaware}, \texttt{ftvol}) & Same backbone as above; \texttt{volaware} pairs paragraphs within a forward-volatility decile; \texttt{ftvol} regresses on the volatility target end-to-end \\
@@ -524,9 +532,8 @@ BERTopic & UMAP (15 neighbours, 5 components, cosine metric) $\rightarrow$ HDBSC
 TF-IDF & English stop words removed; unigrams and bigrams; minimum document frequency 5; 20{,}000 features; sublinear term frequency \\
 Prediction heads & Ridge regression (penalty selected by cross-validation) and a histogram gradient-boosted tree \\
 Generative scoring model & Open-weights instruction model; three zero-to-hundred dimensions; five draws per filing at fixed prompt, model version and decoding seed \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\end{longtable}
+}
 
 \section{Evaluation protocol}
 \label{sec:protocol}
@@ -536,9 +543,9 @@ Every condition is evaluated on the same data, one row per firm and filing year,
 
 \section{Compute used}
 \label{sec:compute}
-All training and evaluation ran on the University of Edinburgh's Teaching cluster, with different stages using different hardware according to their memory and throughput needs. Domain-adaptive pretraining, the three contrastive fine-tuning runs, and the FinMTEB intrinsic evaluation ran on a full NVIDIA RTX~A6000 graphics processing unit (GPU), with the FinMTEB evaluation taking about 49 minutes on that card. The vol-aware contrastive encoder used a full NVIDIA H200. Three lighter single-GPU jobs, the supervised \texttt{ftvol} fine-tune, the full-text windowed re-encoding of the corpus, and the BERTopic fit, ran on an H200 partitioned as a 1g.18gb Multi-Instance GPU (MIG) slice, and the more demanding \texttt{ftvol2018} retrain used a larger 3g.71gb slice of the same card. The generative scoring runs of Section~\ref{sec:llm-pilot-method}, which score insider-trading records with an open-weights language model, also ran on an H200 slice.
+All training and evaluation ran on the University of Edinburgh's Teaching cluster, with different stages using different hardware according to their memory and throughput needs. Domain-adaptive pretraining, the three contrastive fine-tuning runs, and the FinMTEB intrinsic evaluation ran on a full NVIDIA RTX~A6000, with the FinMTEB evaluation taking about 49 minutes on that card. The vol-aware contrastive encoder used a full NVIDIA H200. Three lighter single-GPU jobs, the supervised \texttt{ftvol} fine-tune, the full-text windowed re-encoding of the corpus, and the BERTopic fit, ran on an H200 partitioned as a 1g.18gb MIG slice, and the more demanding \texttt{ftvol2018} retrain used a larger 3g.71gb slice of the same card. The generative scoring runs of Section~\ref{sec:llm-pilot-method}, which score insider-trading records with an open-weights language model, also ran on an H200 slice.
 
-Everything that operates on pre-computed feature vectors rather than on raw text ran on central processing unit (CPU) nodes with no GPU allocation. That covers the ablation and the walk-forward backtest, the window spectrum of Section~\ref{sec:horizon}, which relabels the task at eight window lengths, and the insider-trading conditioning tests of Section~\ref{sec:insider-method}, which split each year's cross-section on pre-filing insider activity.
+Everything that operates on pre-computed feature vectors rather than on raw text ran on CPU-only nodes with no GPU allocation. That covers the ablation and the walk-forward backtest, the window spectrum of Section~\ref{sec:horizon}, which relabels the task at eight window lengths, and the insider-trading conditioning tests of Section~\ref{sec:insider-method}, which split each year's cross-section on pre-filing insider activity.
 
 \section{Responsible research including ethics}
 All data are sourced from publicly available, regulatory-mandated SEC filings (EDGAR), aggregated market price feeds (CRSP and FINSABER), and publicly available earnings-call transcripts. Form~4 insider-transaction records (\S\ref{sec:insider-method}) are themselves a public, statutorily mandated SEC disclosure, so no additional consent or access concern arises from their use, and the generative scoring of \S\ref{sec:llm-pilot-method} strips company and insider identifiers from its prompts as a further precaution beyond the data's already-public status. No personal data beyond what firms and individuals are already required to disclose publicly is used, no human subjects are involved, and no informed consent or IRB review is required. CRSP data are accessed exclusively through WRDS under the University's institutional licence and are not redistributed or retained beyond the project period.
@@ -931,10 +938,6 @@ Labels were regenerated for windows of 3, 5, 7, 10, 20, 60 and 90 trading days, 
 \chapter{Firm-filing feature-table schema}
 \label{app:schema}
 The reusable deliverable ($D_4$) is a firm-filing table, one row per filing: \texttt{CIK} (EDGAR), \texttt{PERMNO} (CRSP CCM linkage), \texttt{filing\_date} (EDGAR submissions API), \texttt{SIC2} (2-digit industry), the dense risk embedding (768-d, from the contrastive encoder), the topic-exposure vector (49-d, from BERTopic), \texttt{lagged\_vol\_30d} (CRSP), and \texttt{fwd\_vol\_30d} (the label; CRSP for the full sample). The first four columns are identifiers, the next two are produced by the NLP pipeline, and the last two are financial labels, so one row is a self-contained record for reproducing or extending the experiments.
-
-\chapter{Citation verification}
-\label{app:citations}
-All numeric and design-choice citations were verified against source PDFs or, where PDFs were unavailable, against arXiv API metadata and text extraction from the source preprint. Two bibliographic housekeeping items are noted for completeness: the Grinold and Kahn edition year (1999 vs 2000) and the Diebold and Mariano 1995-original-vs-2002-reprint choice (the 1995 original is used here). Momentum is cited through Ang et al.\ \cite{ang2006cross}, where it appears as a standard control, rather than through Jegadeesh and Titman (1993), which could not be accessed. Every source cited in Section~\ref{sec:llm-route} is a confirmed published-venue paper. One initial candidate was checked and rejected during this process: a chronology-focused preprint was located in its peer-reviewed form, but that published version reports the opposite of the claim it had originally been proposed to support (specifically, that reasoning-enabled model configurations achieve perfect chronological ordering rather than struggling with it), so it was replaced with a better-fitting published source rather than cited inaccurately.
 
 \chapter{Generative feature extraction: technical detail}
 \label{app:llm-pilot}
